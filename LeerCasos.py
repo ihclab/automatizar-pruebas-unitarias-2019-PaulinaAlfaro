@@ -18,13 +18,11 @@ def conversionTipos(casos):
     for caso in casos:
         entradasList = caso['entrada'].split(' ')
         entradasConverted = []
-
         for num in entradasList:
             if num == "NULL":
                 entradasConverted.append(0.0)
             else:
                 entradasConverted.append(float(num))
-
         caso['entrada'] = entradasConverted
         if caso['esperado'] != 'Exception\n':
             caso['esperado'] = float(caso['esperado'])
@@ -33,6 +31,7 @@ def probarCasos(casos):
     medias = Medias()
     for caso in casos:
         try:
+            #validacion del metodo ingresado
             metodo = getattr(Medias, caso['metodo'])
             result = metodo(medias, caso['entrada'])
             esperado = caso['esperado']
@@ -41,15 +40,11 @@ def probarCasos(casos):
                 caso['valido'] = 'Exito'
             else:
                 caso['valido'] = 'Falla'
-
-
         except:
             print('Exception')
             caso['result'] = 'Exception' 
             caso['valido'] = 'Falla'
-
     return casos
-
 def main():
     casos = leerCasosPrueba("CasosPrueba.txt")
     casosConverted = conversionTipos(casos)
