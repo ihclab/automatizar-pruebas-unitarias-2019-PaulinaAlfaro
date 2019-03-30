@@ -1,7 +1,5 @@
 from Medias import Medias
 import pprint
-
-
 def leerCasosPrueba(filename):
     file = open(filename, "r")
     casos = []
@@ -14,7 +12,6 @@ def leerCasosPrueba(filename):
             'esperado': linelist[3],
         }
         casos.append(caso)
-
     file.close()
     return casos
 def conversionTipos(casos):
@@ -24,18 +21,14 @@ def conversionTipos(casos):
 
         for num in entradasList:
             if num == "NULL":
-                entradasConverted.append(0)
+                entradasConverted.append(0.0)
             else:
                 entradasConverted.append(float(num))
 
         caso['entrada'] = entradasConverted
-
         if caso['esperado'] != 'Exception\n':
             caso['esperado'] = float(caso['esperado'])
-
     return casos
-
-
 def probarCasos(casos):
     medias = Medias()
     for caso in casos:
@@ -43,30 +36,24 @@ def probarCasos(casos):
             metodo = getattr(Medias, caso['metodo'])
             result = metodo(medias, caso['entrada'])
             esperado = caso['esperado']
-
             caso['result'] = result
-
             if esperado == result:
                 caso['valido'] = 'Exito'
             else:
                 caso['valido'] = 'Falla'
 
-            print(metodo)
-            print(round(result, 4))
-            print(esperado)
 
         except:
             print('Exception')
+            caso['result'] = 'Exception' 
+            caso['valido'] = 'Falla'
 
     return casos
-
 
 def main():
     casos = leerCasosPrueba("CasosPrueba.txt")
     casosConverted = conversionTipos(casos)
     resultados = probarCasos(casosConverted)
     pprint.pprint(resultados)
-
-
 if __name__ == "__main__":
     main()
